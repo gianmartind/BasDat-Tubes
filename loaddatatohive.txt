@@ -1,0 +1,24 @@
+CREATE TABLE covid_variants ( 
+	location STRING, 
+	date DATE, 
+	variant STRING, 
+	num_sequences INT, 
+	perc_sequences DOUBLE, 
+	num_sequences_total INT  
+	)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+tblproperties ("skip.header.line.count"="1"); 
+
+CREATE TABLE vaccinations_by_manufacturer ( 
+	location STRING, 
+	date DATE, 
+	vaccine STRING, 
+	total_vaccinations INT
+	)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+tblproperties ("skip.header.line.count"="1"); 
+
+LOAD DATA INPATH '/basdatpbd/tubes/vaccinations-by-manufacturer.csv' OVERWRITE INTO TABLE vaccinations_by_manufacturer; 
+LOAD DATA INPATH '/basdatpbd/electronic_sales/covid-variants.csv' OVERWRITE INTO TABLE covid_variants;
