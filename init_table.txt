@@ -1,0 +1,25 @@
+1. Tabel owid-covid-cases
+CREATE TABLE covid_cases (
+	continent STRING,
+	location STRING,
+	cdate DATE,
+	new_cases INT,
+	new_deaths INT
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+tblproperties ("skip.header.line.count"="1"); 
+
+LOAD DATA INPATH '/basdatpbd/tubes/owid-covid-data.csv' OVERWRITE INTO TABLE covid_cases; 
+
+2. Tabel vaccinations
+CREATE TABLE vaccinations (
+	location STRING,
+	cdate DATE,
+	daily_vaccinations INT
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+tblproperties ("skip.header.line.count"="1"); 
+
+LOAD DATA INPATH '/basdatpbd/tubes/vaccinations.csv' OVERWRITE INTO TABLE vaccinations; 
