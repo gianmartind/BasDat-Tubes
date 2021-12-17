@@ -10,7 +10,7 @@ CREATE TABLE continent_cases (
 	new_cases INT
 )
 ROW FORMAT DELIMITED 
-FIELDS TERMINATED BY ','; 
+FIELDS TERMINATED BY ','
 tblproperties ("skip.header.line.count"="1"); 
 
 -- query agregat
@@ -21,6 +21,8 @@ SELECT continent, cdate, sum(new_cases) as cases
 FROM covid_cases
 GROUP BY continent, cdate;
 
+LOAD DATA INPATH '/basdatpbd/tubes_out/continent_cases' OVERWRITE INTO TABLE continent_cases;
+
 - Vaksinasi per Benua
 
 -- Rancangan tabel
@@ -30,16 +32,18 @@ CREATE TABLE continent_vaccinations (
 	daily_vaccinations INT
 )
 ROW FORMAT DELIMITED 
-FIELDS TERMINATED BY ',';
+FIELDS TERMINATED BY ','
 tblproperties ("skip.header.line.count"="1"); 
 
 -- query agregat
 INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/continent_vaccinations'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
-SELECT continent, covid_cases.cdate, sum(daily_vaccinations) as daily_vacc
-FROM covid_cases INNER JOIN vaccinations ON covid_cases.location = vaccinations.location
-GROUP BY continent
+SELECT continent, vaccinations.cdate, sum(daily_vaccinations) as daily_vacc
+FROM vaccinations INNER JOIN locations ON vaccinations.location = locations.location
+GROUP BY continent, cdate;
+
+LOAD DATA INPATH '/basdatpbd/tubes_out/continent_vaccinations' OVERWRITE INTO TABLE continent_vaccinations;
 
 ===============
 Masalah 2
@@ -58,6 +62,6 @@ tblproperties ("skip.header.line.count"="1");
 INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/death_percent'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
-SELECT continent, covid_cases.cdate, (sum(new_death)/sum(new_date)) as percentage
+SELECT continent, covid_cases.cweek, (sum(new_death)/sum(new_date)) as percentage
 FROM covid_cases INNER JOIN date_details ON covid_cases.cdate = date_details.cdate
-GROUP BY cmonth
+GROUP BY continent, cweek;
