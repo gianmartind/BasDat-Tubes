@@ -48,10 +48,10 @@ LOAD DATA INPATH '/basdatpbd/tubes_out/continent_vaccinations' OVERWRITE INTO TA
 ===============
 Masalah 2
 ===============
-- Persentase kematian
+- Tabel Persentase kematian
 CREATE TABLE death_percent (
 	continent STRING,
-	cmonth INT,
+	cdate INT,
 	percentage FLOAT
 )
 ROW FORMAT DELIMITED 
@@ -62,6 +62,16 @@ tblproperties ("skip.header.line.count"="1");
 INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/death_percent'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
-SELECT continent, covid_cases.cweek, (sum(new_death)/sum(new_date)) as percentage
+SELECT continent, covid_cases.cdate, (sum(new_death)/sum(new_date)) as percentage
+FROM covid_cases INNER JOIN date_details ON covid_cases.cdate = date_details.cdate
+GROUP BY continent, cdate;
+
+-- query data kematian tiap minggu
+
+-- query vaksinasi tiap minggu
+INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/vaccinations_weekly'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+SELECT continent, covid_cases.cweek, sum(daily_vaccinations) as weekly_vaccinations
 FROM covid_cases INNER JOIN date_details ON covid_cases.cdate = date_details.cdate
 GROUP BY continent, cweek;
