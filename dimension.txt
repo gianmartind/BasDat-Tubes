@@ -14,6 +14,8 @@ FIELDS TERMINATED BY ','
 SELECT DISTINCT location, continent
 FROM covid_cases;
 
+LOAD DATA INPATH '/basdatpbd/tubes_out/locations' OVERWRITE INTO TABLE locations; 
+
 2. date
 CREATE TABLE date_details (
 	cdate DATE,
@@ -31,3 +33,5 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 SELECT DISTINCT cdate, weekofyear(cdate), month(cdate), year(cdate)
 FROM covid_cases;
+
+LOAD DATA INPATH '/basdatpbd/tubes_out/date_details' OVERWRITE INTO TABLE date_details; 
