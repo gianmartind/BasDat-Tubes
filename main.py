@@ -10,7 +10,7 @@ import dataset
 import pandas as pd
 
 #%%
-github_data = dataset.download_data('github')
+github_data = dataset.download_github_data([3])
 
 #%%
 dataset.load_to_hdfs(github_data)

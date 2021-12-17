@@ -9,17 +9,10 @@ Created on Thu Nov 18 10:00:43 2021
 import pandas as pd
 from hdfs import InsecureClient
 import time
-
-def download_data(src=None):
-    if src == None:
-        return None
-    elif src == 'github':
-        return download_github_data()
-    elif src == 'gstatic':
-        return download_gstatic_data()
         
-def download_github_data():
+def download_github_data(selected_index):
     start_time = time.time()
+
     github_links = [
             'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv',
             'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv',
@@ -28,9 +21,11 @@ def download_github_data():
             'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/variants/covid-variants.csv'
         ]
     
+    selected_links = [github_links[i] for i in selected_index]
+
     datasets_github = dict()
     
-    for data in github_links:
+    for data in selected_links:
         dataset_name = data.split('/')[-1].lower()
         datasets_github[dataset_name] = pd.read_csv(data)
         print('\'{}\' downloaded'.format(dataset_name))

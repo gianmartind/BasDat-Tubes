@@ -1,0 +1,7 @@
+CREATE TABLE countries (
+	country STRING,
+	continent STRING
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+tblproperties ("skip.header.line.count"="1"); 
