@@ -1,6 +1,6 @@
 CREATE TABLE covid_variants ( 
 	location STRING, 
-	date DATE, 
+	c_date DATE, 
 	variant STRING, 
 	num_sequences INT, 
 	perc_sequences DOUBLE, 
@@ -20,5 +20,18 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ',' 
 tblproperties ("skip.header.line.count"="1"); 
 
+CREATE TABLE owid_covid (
+	iso_code STRING,
+	continent STRING,
+	location STRING,
+	c_date DATE,
+	total_cases INT,
+	new_cases INT
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+tblproperties ("skip.header.line.count"="1"); 
+
 LOAD DATA INPATH '/basdatpbd/tubes/vaccinations-by-manufacturer.csv' OVERWRITE INTO TABLE vaccinations_by_manufacturer; 
-LOAD DATA INPATH '/basdatpbd/electronic_sales/covid-variants.csv' OVERWRITE INTO TABLE covid_variants;
+LOAD DATA INPATH '/basdatpbd/tubes/covid-variants.csv' OVERWRITE INTO TABLE covid_variants;
+LOAD DATA INPATH '/basdatpbd/tubes/owid-covid-data.csv' OVERWRITE INTO TABLE owid_covid;

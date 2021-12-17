@@ -1,0 +1,37 @@
+1. location 
+CREATE TABLE locations (
+	location STRING,
+	continent STRING
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+tblproperties ("skip.header.line.count"="1"); 
+
+- query
+INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/locations'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+SELECT DISTINCT location, continent
+FROM covid_cases;
+
+LOAD DATA INPATH '/basdatpbd/tubes_out/locations' OVERWRITE INTO TABLE locations; 
+
+2. date
+CREATE TABLE date_details (
+	cdate DATE,
+	cweek INT,
+	cmonth INT,
+	cyear INT
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+tblproperties ("skip.header.line.count"="1"); 
+
+- query
+INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/date_details'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+SELECT DISTINCT cdate, weekofyear(cdate), month(cdate), year(cdate)
+FROM covid_cases;
+
+LOAD DATA INPATH '/basdatpbd/tubes_out/date_details' OVERWRITE INTO TABLE date_details; 
