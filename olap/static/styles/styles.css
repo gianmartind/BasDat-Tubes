@@ -1,0 +1,31 @@
+@font-face {
+    font-family: "Google";
+    src: url(../font/Product-Sans-Regular.ttf);
+  }
+
+.buttonb {
+    background-color: rgb(65, 133, 242);
+    color: whitesmoke;
+    border: 1px solid rgb(65, 133, 242);
+    border-radius: 10px;
+    padding: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    cursor: pointer;
+    font-family: "Google";
+    font-size: 16px;
+    transition: 0.4s;
+  }
+  
+  .buttonb:hover {
+    color: rgb(65, 133, 242);
+    background-color: whitesmoke;
+    border: 1px solid rgb(65, 133, 242);
+    transition: 0.4s;
+  }
+
+  .pressed {
+    color: rgb(65, 133, 242);
+    background-color: whitesmoke;
+    border: 1px solid rgb(65, 133, 242);
+  }

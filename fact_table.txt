@@ -51,20 +51,20 @@ Masalah 2
 - Tabel Persentase kematian
 CREATE TABLE death_percent (
 	continent STRING,
-	cdate INT,
+	cdate DATE,
 	percentage FLOAT
 )
 ROW FORMAT DELIMITED 
-FIELDS TERMINATED BY ','; 
+FIELDS TERMINATED BY ','
 tblproperties ("skip.header.line.count"="1"); 
 
 -- query agregat
 INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/death_percent'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
-SELECT continent, covid_cases.cdate, (sum(new_death)/sum(new_date)) as percentage
+SELECT continent, covid_cases.cdate, (sum(new_deaths)/sum(new_cases)) as percentage
 FROM covid_cases INNER JOIN date_details ON covid_cases.cdate = date_details.cdate
-GROUP BY continent, cdate;
+GROUP BY continent, covid_cases.cdate;
 
 LOAD DATA INPATH '/basdatpbd/tubes_out/death_percent' OVERWRITE INTO TABLE death_percent;
 
@@ -73,22 +73,22 @@ Query untuk OLAP
 ===============
 
 -- query data covid
-INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/vaccinations_weekly'
+INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/daily_covid_cases'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 SELECT continent, date_details.cdate, date_details.cweek, date_details.cmonth, new_cases
-FROM covid_cases INNER JOIN date_details ON covid_cases.cdate = date_details.cdate
+FROM continent_cases INNER JOIN date_details ON continent_cases.cdate = date_details.cdate;
 
 -- query vaksinasi
-INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/vaccinations_weekly'
+INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/daily_vaccinations'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 SELECT continent, date_details.cdate, date_details.cweek, date_details.cmonth, daily_vaccinations
-FROM vaccinations INNER JOIN date_details ON vaccinations.cdate = date_details.cdate
+FROM continent_vaccinations INNER JOIN date_details ON continent_vaccinations.cdate = date_details.cdate;
 
 -- query data kematian
-INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/vaccinations_weekly'
+INSERT OVERWRITE DIRECTORY '/basdatpbd/tubes_out/daily_death_percent'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 SELECT continent, date_details.cdate, date_details.cweek, date_details.cmonth, percentage
-FROM death_percent INNER JOIN date_details ON date_percent.cdate = date_details.cdate
+FROM death_percent INNER JOIN date_details ON death_percent.cdate = date_details.cdate;

@@ -1,0 +1,112 @@
+<html>
+
+<head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+
+<body>
+    <div class="w3-container">
+        <h1>COVID-19 cases and vaccinations</h1>
+    </div>
+    <div class="w3-container">
+        <div class="w3-row w3-card w3-margin w3-padding" id="chart1-container">
+            <div class="w3-row" id="chart1"></div>
+            <button onclick="chart1('date', this.id)" class="buttonb" id='button1a'>date</button>
+            <button onclick="chart1('week', this.id)" class="buttonb" id='button1b'>week</button>
+            <button onclick="chart1('month', this.id)" class="buttonb" id='button1c'>month</button>
+        </div>
+        <div class="w3-row w3-card w3-margin w3-padding" id="chart2-container">
+            <div class="w3-row" id="chart2"></div>
+            <button onclick="chart2('date')" class="buttonb">date</button>
+            <button onclick="chart2('week')" class="buttonb">week</button>
+            <button onclick="chart2('month')" class="buttonb">month</button>
+        </div>
+        <div class="w3-row w3-card w3-margin w3-padding" id="chart3-container">
+            <div class="w3-row" id="chart3"></div>
+            <button onclick="chart3('date')" class="buttonb">date</button>
+            <button onclick="chart3('week')" class="buttonb">week</button>
+            <button onclick="chart3('month')" class="buttonb">month</button>
+        </div>
+        
+    </div>
+</body>
+<script>
+    window.onload = function() {
+        chart1('week');
+        chart2('week');
+        chart3('week');
+    };
+
+    function chart1(agg, x) {
+        fetch("/chart1?agg=" + agg)
+            .then((response) => {
+                return response.json();
+            })
+            .then((result) => {
+                //image_path = result.result
+                let title = 'COVID Cases by ' + agg  
+                create_chart('chart1', agg, result, title)
+            });
+    }
+
+    function chart2(agg) {
+        fetch("/chart2?agg=" + agg)
+            .then((response) => {
+                return response.json();
+            })
+            .then((result) => {
+                //image_path = result.result
+                let title = 'Vaccination Numbers by ' + agg  
+                create_chart('chart2', agg, result, title)
+            });
+    }
+
+    function chart3(agg) {
+        fetch("/chart3?agg=" + agg)
+            .then((response) => {
+                return response.json();
+            })
+            .then((result) => {
+                //image_path = result.result
+                let title = 'Death Percentage by ' + agg 
+                create_chart('chart3', agg, result, title)
+            });
+    }
+
+    function create_chart(id, agg, result, title) {
+        var data = []            
+        for (let [key, value] of Object.entries(result)) {
+            let trace = {
+                x: value.period,
+                y: value.val,
+                type: 'line',
+                name: key
+            }
+            data.push(trace)
+        }
+
+        var layout = {
+            title: {
+                text:title,
+                xref: 'paper',
+                x: 0.0,
+            },
+            xaxis: {
+                title: {
+                    text: agg
+                },
+            },
+            yaxis: {
+                title: {
+                    text: 'Value'              
+                }
+            }
+        };
+        Plotly.newPlot(id, data, layout)
+    }
+ 
+</script>
+
+</html>

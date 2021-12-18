@@ -37,7 +37,7 @@ df_vacc = df_vacc[['location', 'date', 'daily_vaccinations']]
 df_vacc.fillna(0, inplace=True)
 
 #gunakan hanya tahun 2021
-df_vacc = df_vacc[df_vacc['date'].str.startswith('2021')]
+df_vacc = df_vacc[df_owid['date'].str.startswith('2021')]
 
 #%% load to hdfs
 cleaned_datasets = dict()
