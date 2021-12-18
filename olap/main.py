@@ -6,7 +6,6 @@ from flask import Response
 from os import listdir
 
 import pandas as pd
-import plotly.express as px
 
 import numpy as np
 

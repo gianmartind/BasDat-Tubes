@@ -104,7 +104,10 @@
                 }
             }
         };
-        Plotly.newPlot(id, data, layout)
+
+        var config = {responsive: true} 
+
+        Plotly.newPlot(id, data, layout, config)
     }
  
 </script>
